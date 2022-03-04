@@ -69,6 +69,29 @@ const registerRoom = createSlice({
       state.maximumGuestCount = action.payload
       return state
     },
+    //침실 개수 변경하기
+    setBedroomCount(state, action: PayloadAction<number>) {
+      const bedroomCount = action.payload
+      let {bedList} = state
+      state.bedroomCount = bedroomCount
+      //침실개수가 변경되면 bedlist에 침실개수만큼의 object가 만들어져야한다.
+      if (bedroomCount < bedList.length) {
+        //기존 침대 개수가 더 많으면 초과 부분 잘라내기
+        bedList = state.bedList.slice(0, bedroomCount)
+      } else {
+        //변경될 침대 개수가 더 많으면 나머지 침실 채우기
+        for (let i = bedList.length + 1; i < bedroomCount + 1; i += 1) {
+          bedList.push({id: i, beds: []})
+        }
+      }
+      state.bedList = bedList
+      return state
+    },
+    //최대 침대 개수 변경하기
+    setBedCount(state, action: PayloadAction<number>) {
+      state.bedCount = action.payload
+      return state
+    },
   },
 })
 
