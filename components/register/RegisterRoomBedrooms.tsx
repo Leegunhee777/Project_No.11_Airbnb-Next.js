@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import styled from 'styled-components'
 import palette from '../../styles/palette'
 import {useDispatch} from 'react-redux'
@@ -8,7 +8,8 @@ import Counter from '../common/Counter'
 import {getNumber} from '../../lib/utils'
 import ValidateSelector from '../common/ValidateSelector'
 import {bedroomCountList} from '../../lib/staticData'
-import Button from '../common/Button'
+import RegisterRoomBedTypes from './RegisterRoomBedTypes'
+import {BedType} from '../../types/room'
 
 const Container = styled.div`
   padding: 62px 30px 100px;
@@ -22,33 +23,33 @@ const Container = styled.div`
     color: ${palette.gray_76};
     margin-bottom: 6px;
   }
-  .rigister-room-step-info {
+  .register-room-step-info {
     font-size: 14px;
     max-width: 400px;
     margin-bottom: 24px;
     max-width: 400px;
     word-break: keep-all;
   }
-  .rigister-room-maximum-guest-count-wrapper {
+  .register-room-maximum-guest-count-wrapper {
     width: 320px;
     margin-top: 24px;
     margin-bottom: 32px;
   }
-  .rigister-room-bedroom-count-wrapper {
+  .register-room-bedroom-count-wrapper {
     width: 320px;
     margin-bottom: 32px;
   }
-  .rigister-room-bed-count-wrapper {
+  .register-room-bed-count-wrapper {
     width: 320px;
     margin-bottom: 57px;
   }
-  .rigister-room-bed-type-info {
+  .register-room-bed-type-info {
     margin-top: 6px;
     margin-bottom: 20px;
     max-width: 400px;
     word-break: keep-all;
   }
-  .rigister-room-bed-type-list-wrapper {
+  .register-room-bed-type-list-wrapper {
     width: 548px;
   }
   .register-room-bedroom {
@@ -64,10 +65,10 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
   }
-  .rigister-room-bed-type-bedroom-texts {
+  .register-room-bed-type-bedroom-texts {
     margin-bottom: 28px;
   }
-  .rigister-room-bed-type-bedroom {
+  .register-room-bed-type-bedroom {
     font-size: 19px;
     color: ${palette.gray_48};
   }
@@ -99,22 +100,34 @@ const RegisterRoomBedrooms: React.FC = () => {
   const onChangeBedCount = (value: number) => {
     dispatch(registerRoomActions.setBedCount(value))
   }
+
+  const isEqualBedCountAndBedList = (
+    bedCount: number,
+    bedList: {id: number; beds: {type: BedType; count: number}[]}[]
+  ) => {
+    let bedListTotalCount = 0
+    bedList?.forEach((obj) => {
+      obj?.beds?.forEach((innerObj) => (bedListTotalCount += innerObj.count))
+    })
+    return bedCount === bedListTotalCount
+  }
+
   return (
     <Container>
       <h2>숙소에 얼마나 많은 인원이 숙박할 수 있나요?</h2>
       <h3>2단계</h3>
-      <p className='rigister-room-step-info '>
+      <p className='register-room-step-info '>
         모든 게스트가 편안하게 숙박할 수 있도록 침대가 충분히 구비되어 있는지
         확인하세요
       </p>
-      <div className='rigister-room-maximum-guest-count-wrapper '>
+      <div className='register-room-maximum-guest-count-wrapper '>
         <Counter
           label='최대숙박인원'
           value={maximumGuestCount}
           onChange={onChangeMaximumGuestCount}
         />
       </div>
-      <div className='rigister-room-bedroom-count-wrapper'>
+      <div className='register-room-bedroom-count-wrapper'>
         <ValidateSelector
           type='register'
           value={`침실 ${bedroomCount}개`}
@@ -123,29 +136,44 @@ const RegisterRoomBedrooms: React.FC = () => {
           options={bedroomCountList}
         />
       </div>
-      <div className='rigister-room-bed-count-wrapper'>
+      <div className='register-room-bed-count-wrapper'>
         <Counter label='침대' value={bedCount} onChange={onChangeBedCount} />
+        {!isEqualBedCountAndBedList(bedCount, bedList) && (
+          <p
+            className='register-room-bed-type-info'
+            style={{color: palette.davidson_orange}}>
+            위에서 지정하신 침대의 총갯수와 아래에서 지정하신 침대유형의
+            침대개수가 맞지 않습니다.
+          </p>
+        )}
       </div>
       <h4>침대유형</h4>
-      <p className='rigister-room-bed-type-info'>
+      <p className='register-room-bed-type-info'>
         각 침실에 놓인 침대 유형을 명시하면 숙소에 침대가 어떻게 구비되어 있는지
         게스트가 잘 파악할수 있습니다
       </p>
-      <div className='rigister-room-bed-type-list-wrapper'>
+      {/* <div className='register-room-bed-type-list-wrapper'>
         {bedList.map((bedroom) => (
           <div key={bedroom.id} className='register-room-bedroom'>
             <div className='register-room-bed-type-top'>
-              <div className='rigister-room-bed-type-bedroom-texts'>
-                <p className='rigister-room-bed-type-bedroom'>{bedroom.id}번 침실</p>
-                <p className='rigister-room-bed-type-bedroom'>침대 0개</p>
+              <div className='register-room-bed-type-bedroom-texts'>
+                <p className='register-room-bed-type-bedroom'>
+                  {bedroom.id}번 침실
+                </p>
+                <p className='register-room-bed-type-bedroom'>침대 0개</p>
               </div>
-              <Button styleType='rigister' color='white'>
+              <Button styleType='register' color='white'>
                 침대 추가하기
               </Button>
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
+      <ul className='register-room-bed-type-list-wrapper'>
+        {bedList.map((bedroom) => (
+          <RegisterRoomBedTypes key={bedroom.id} bedroom={bedroom} />
+        ))}
+      </ul>
     </Container>
   )
 }

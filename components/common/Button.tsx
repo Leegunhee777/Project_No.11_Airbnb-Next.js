@@ -45,16 +45,16 @@ const RegisterButtonStyle = css`
   outline: none;
   cursor: pointer;
 `
-const Container = styled.button<{styleType: 'normal' | 'rigister'}>`
+const Container = styled.button<{styleType: 'normal' | 'register'}>`
   ${({styleType}) =>
-    styleType === 'rigister' ? RegisterButtonStyle : normalButtonStyle}
+    styleType === 'register' ? RegisterButtonStyle : normalButtonStyle}
   ${(props) => getButtonColor(props.color || '')}
 `
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
   color?: 'dark_cyan' | 'white'
-  styleType?: 'normal' | 'rigister'
+  styleType?: 'normal' | 'register'
 }
 
 const Button: React.FC<IProps> = ({
