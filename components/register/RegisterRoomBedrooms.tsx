@@ -1,16 +1,16 @@
-import React, {useMemo} from 'react'
-import styled from 'styled-components'
-import palette from '../../styles/palette'
-import {useDispatch} from 'react-redux'
-import {useSelector} from '../../store'
-import {registerRoomActions} from '../../store/registerRoom'
-import Counter from '../common/Counter'
-import {getNumber} from '../../lib/utils'
-import ValidateSelector from '../common/ValidateSelector'
-import {bedroomCountList} from '../../lib/staticData'
-import RegisterRoomBedTypes from './RegisterRoomBedTypes'
-import {BedType} from '../../types/room'
-
+import React, { useMemo } from 'react';
+import styled from 'styled-components';
+import palette from '../../styles/palette';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../store';
+import { registerRoomActions } from '../../store/registerRoom';
+import Counter from '../common/Counter';
+import { getNumber } from '../../lib/utils';
+import ValidateSelector from '../common/ValidateSelector';
+import { bedroomCountList } from '../../lib/staticData';
+import RegisterRoomBedTypes from './RegisterRoomBedTypes';
+import { BedType } from '../../types/room';
+import RegisterRoomBedList from './RegisterRoomBedList';
 const Container = styled.div`
   padding: 62px 30px 100px;
   h2 {
@@ -72,83 +72,91 @@ const Container = styled.div`
     font-size: 19px;
     color: ${palette.gray_48};
   }
-`
+`;
 
 const RegisterRoomBedrooms: React.FC = () => {
   const maximumGuestCount = useSelector(
-    (state) => state.registerRoom.maximumGuestCount
-  )
-  const bedroomCount = useSelector((state) => state.registerRoom.bedroomCount)
-  const bedCount = useSelector((state) => state.registerRoom.bedCount)
-  const bedList = useSelector((state) => state.registerRoom.bedList)
+    state => state.registerRoom.maximumGuestCount
+  );
+  const bedroomCount = useSelector(state => state.registerRoom.bedroomCount);
+  const bedCount = useSelector(state => state.registerRoom.bedCount);
+  const bedList = useSelector(state => state.registerRoom.bedList);
+  const publicbedList = useSelector(state => state.registerRoom.publicBedList);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   //최대 숙박 인원 변경시
   const onChangeMaximumGuestCount = (value: number) => {
-    dispatch(registerRoomActions.setMaximumGuestCount(value))
-  }
+    dispatch(registerRoomActions.setMaximumGuestCount(value));
+  };
   //침실 개수 변경시
   const onChangeBedroomCount = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     dispatch(
       registerRoomActions.setBedroomCount(getNumber(event.target.value) || 0)
-    )
-  }
+    );
+  };
   //침대 개수 변경시
   const onChangeBedCount = (value: number) => {
-    dispatch(registerRoomActions.setBedCount(value))
-  }
+    dispatch(registerRoomActions.setBedCount(value));
+  };
 
   const isEqualBedCountAndBedList = (
     bedCount: number,
-    bedList: {id: number; beds: {type: BedType; count: number}[]}[]
+    publicbedCount: { type: BedType; count: number }[],
+    bedList: { id: number; beds: { type: BedType; count: number }[] }[]
   ) => {
-    let bedListTotalCount = 0
-    bedList?.forEach((obj) => {
-      obj?.beds?.forEach((innerObj) => (bedListTotalCount += innerObj.count))
-    })
-    return bedCount === bedListTotalCount
-  }
+    let bedListTotalCount = 0;
+    bedList?.forEach(obj => {
+      obj?.beds?.forEach(innerObj => (bedListTotalCount += innerObj.count));
+    });
+
+    publicbedCount?.forEach(obj => {
+      bedListTotalCount += obj.count;
+    });
+
+    return bedCount === bedListTotalCount;
+  };
 
   return (
     <Container>
       <h2>숙소에 얼마나 많은 인원이 숙박할 수 있나요?</h2>
       <h3>2단계</h3>
-      <p className='register-room-step-info '>
+      <p className="register-room-step-info ">
         모든 게스트가 편안하게 숙박할 수 있도록 침대가 충분히 구비되어 있는지
         확인하세요
       </p>
-      <div className='register-room-maximum-guest-count-wrapper '>
+      <div className="register-room-maximum-guest-count-wrapper ">
         <Counter
-          label='최대숙박인원'
+          label="최대숙박인원"
           value={maximumGuestCount}
           onChange={onChangeMaximumGuestCount}
         />
       </div>
-      <div className='register-room-bedroom-count-wrapper'>
+      <div className="register-room-bedroom-count-wrapper">
         <ValidateSelector
-          type='register'
+          type="register"
           value={`침실 ${bedroomCount}개`}
           onChange={onChangeBedroomCount}
-          label='게스트가 사용할수 있는 침실은 몇개인가요?'
+          label="게스트가 사용할수 있는 침실은 몇개인가요?"
           options={bedroomCountList}
         />
       </div>
-      <div className='register-room-bed-count-wrapper'>
-        <Counter label='침대' value={bedCount} onChange={onChangeBedCount} />
-        {!isEqualBedCountAndBedList(bedCount, bedList) && (
+      <div className="register-room-bed-count-wrapper">
+        <Counter label="침대" value={bedCount} onChange={onChangeBedCount} />
+        {!isEqualBedCountAndBedList(bedCount, publicbedList, bedList) && (
           <p
-            className='register-room-bed-type-info'
-            style={{color: palette.davidson_orange}}>
+            className="register-room-bed-type-info"
+            style={{ color: palette.davidson_orange }}
+          >
             위에서 지정하신 침대의 총갯수와 아래에서 지정하신 침대유형의
             침대개수가 맞지 않습니다.
           </p>
         )}
       </div>
       <h4>침대유형</h4>
-      <p className='register-room-bed-type-info'>
+      <p className="register-room-bed-type-info">
         각 침실에 놓인 침대 유형을 명시하면 숙소에 침대가 어떻게 구비되어 있는지
         게스트가 잘 파악할수 있습니다
       </p>
@@ -169,13 +177,9 @@ const RegisterRoomBedrooms: React.FC = () => {
           </div>
         ))}
       </div> */}
-      <ul className='register-room-bed-type-list-wrapper'>
-        {bedList.map((bedroom) => (
-          <RegisterRoomBedTypes key={bedroom.id} bedroom={bedroom} />
-        ))}
-      </ul>
+      <RegisterRoomBedList bedList={bedList} />
     </Container>
-  )
-}
+  );
+};
 
-export default RegisterRoomBedrooms
+export default RegisterRoomBedrooms;
