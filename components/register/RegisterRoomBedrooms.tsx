@@ -11,6 +11,7 @@ import { bedroomCountList } from '../../lib/staticData';
 import RegisterRoomBedTypes from './RegisterRoomBedTypes';
 import { BedType } from '../../types/room';
 import RegisterRoomBedList from './RegisterRoomBedList';
+import RefisterRoomFooter from './RegisterRoomFooter';
 const Container = styled.div`
   padding: 62px 30px 100px;
   h2 {
@@ -141,6 +142,7 @@ const RegisterRoomBedrooms: React.FC = () => {
           onChange={onChangeBedroomCount}
           label="게스트가 사용할수 있는 침실은 몇개인가요?"
           options={bedroomCountList}
+          isValid={!!bedroomCount}
         />
       </div>
       <div className="register-room-bed-count-wrapper">
@@ -178,6 +180,14 @@ const RegisterRoomBedrooms: React.FC = () => {
         ))}
       </div> */}
       <RegisterRoomBedList bedList={bedList} />
+      <RefisterRoomFooter
+        prevHref="/room/register/building"
+        nextHref="/room/register/bathroom"
+        isValid={
+          !!bedroomCount &&
+          isEqualBedCountAndBedList(bedCount, publicbedList, bedList)
+        }
+      />
     </Container>
   );
 };

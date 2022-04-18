@@ -1,8 +1,8 @@
-import React from 'react'
-import styled, {css} from 'styled-components'
-import palette from '../../styles/palette'
-import {useSelector} from '../../store'
-import WarningIcon from '../../public/static/svg/common/warning.svg'
+import React from 'react';
+import styled, { css } from 'styled-components';
+import palette from '../../styles/palette';
+import { useSelector } from '../../store';
+import WarningIcon from '../../public/static/svg/common/warning.svg';
 
 const normalSelectorStyle = css`
   width: 100%;
@@ -26,7 +26,7 @@ const normalSelectorStyle = css`
       border-color: ${palette.dark_cyan};
     }
   }
-`
+`;
 
 const RegisterSelectorStyle = css`
   width: 100%;
@@ -53,31 +53,31 @@ const RegisterSelectorStyle = css`
     background-position: right 14px center;
     background-repeat: no-repeat;
   }
-`
+`;
 interface SelectorContainerProps {
-  isValid: boolean
-  checkValidateMode: boolean
+  isValid: boolean;
+  checkValidateMode: boolean;
   //selector의 재사용을 높이기 위해  type을 이용하여 , 다른 style을 적용하였음
-  type: 'register' | 'normal'
+  type: 'register' | 'normal';
 }
 const Container = styled.div<SelectorContainerProps>`
-  ${({type}) => type === 'normal' && normalSelectorStyle}
-  ${({type}) => type === 'register' && RegisterSelectorStyle}
+  ${({ type }) => type === 'normal' && normalSelectorStyle}
+  ${({ type }) => type === 'register' && RegisterSelectorStyle}
 
   select {
-    ${({checkValidateMode, isValid}) => {
+    ${({ checkValidateMode, isValid }) => {
       if (checkValidateMode) {
         if (!isValid) {
           return css`
             border-color: ${palette.tawny};
             background-color: ${palette.snow};
-          `
+          `;
         }
         return css`
           border-color: ${palette.dark_cyan};
-        `
+        `;
       }
-      return undefined
+      return undefined;
     }}
 
     &:disabled {
@@ -102,16 +102,16 @@ const Container = styled.div<SelectorContainerProps>`
       color: ${palette.davidson_orange};
     }
   }
-`
+`;
 interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  options?: string[]
-  disabledOptions?: string[]
-  value?: string
-  isValid?: boolean
+  options?: string[];
+  disabledOptions?: string[];
+  value?: string;
+  isValid?: boolean;
   //아래 속성들은 selector의 응용을위해 추가됨
-  label?: string
-  errorMessage?: string
-  type?: 'register' | 'normal'
+  label?: string;
+  errorMessage?: string;
+  type?: 'register' | 'normal';
 }
 //Props로 ?: 를 사용할경우 해당값이 undefined가될수있다고 하여 타입에러가 발생한다,
 //이는 예외처리를 해주어야한다.
@@ -127,14 +127,15 @@ const ValidateSelector: React.FC<IProps> = ({
   ...props
 }) => {
   const checkValidateMode = useSelector(
-    (state) => state.common.checkValidateMode
-  )
+    state => state.common.checkValidateMode
+  );
 
   return (
     <Container
       isValid={!!isValid}
       checkValidateMode={checkValidateMode}
-      type={type}>
+      type={type}
+    >
       <label>
         {label && <span>{label}</span>}
         <select {...props}>
@@ -152,13 +153,13 @@ const ValidateSelector: React.FC<IProps> = ({
       </label>
 
       {checkValidateMode && !isValid && (
-        <div className='selector-warning'>
+        <div className="selector-warning">
           <WarningIcon />
           <p>{errorMessage}</p>
         </div>
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default React.memo(ValidateSelector)
+export default React.memo(ValidateSelector);
