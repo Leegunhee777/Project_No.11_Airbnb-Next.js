@@ -1,4 +1,4 @@
-import {BedType} from '../types/room'
+import { BedType } from '../types/room';
 
 //1월부터 2월까지
 export const monthList = [
@@ -14,13 +14,13 @@ export const monthList = [
   '10월',
   '11월',
   '12월',
-]
+];
 
 //1부터 31까지의 배열생성
-export const dayList = Array.from(Array(31), (_, i) => String(i + 1))
+export const dayList = Array.from(Array(31), (_, i) => String(i + 1));
 
 //2020년 부터 1900년 까지 배열생성
-export const yearList = Array.from(Array(121), (_, i) => String(2020 - i))
+export const yearList = Array.from(Array(121), (_, i) => String(2020 - i));
 
 //숙소 큰 범위의 건물 유형
 export const largeBuildingTypeList = [
@@ -30,7 +30,7 @@ export const largeBuildingTypeList = [
   '독특한 숙소',
   'B&B',
   '부티크호텔',
-]
+];
 //아파트 건물 유형
 export const apartmentBuildingTypeList = [
   '공동주택',
@@ -38,7 +38,7 @@ export const apartmentBuildingTypeList = [
   '카사 파르티쿨라르(쿠바)',
   '로프트',
   '레지던스',
-]
+];
 //주택 건물 유형
 export const houstBuildingTypeList = [
   '방갈로',
@@ -62,13 +62,13 @@ export const houstBuildingTypeList = [
   '타운하우스',
   '트룰로(이탈리아)',
   '저택',
-]
+];
 //별채 건물유형
 export const secondaryUnitBuildingTypeList = [
   '게스트용 별채',
   '게스트 스위트',
   '농장 체험 숙박',
-]
+];
 
 //독특한 숙소 건물유형
 export const uniqueSpaceBuildingTypeList = [
@@ -97,7 +97,7 @@ export const uniqueSpaceBuildingTypeList = [
   '트리하우스',
   '풍차',
   '유르트',
-]
+];
 
 //B&B 건물유형
 export const bnbBuildingTypeList = [
@@ -106,7 +106,7 @@ export const bnbBuildingTypeList = [
   '민수(타이완)',
   '산장',
   '료칸(일본)',
-]
+];
 
 //부티크 호텔 건물 유형
 export const boutiquesHotelBuildingTypeList = [
@@ -118,10 +118,10 @@ export const boutiquesHotelBuildingTypeList = [
   '리조트',
   '레지던스',
   '객잔(중국)',
-]
+];
 
 //침실 개수
-export const bedroomCountList = Array.from(Array(16), (_, i) => `침실 ${i}개`)
+export const bedroomCountList = Array.from(Array(16), (_, i) => `침실 ${i}개`);
 
 //침대 유형
 export const bedTypes: BedType[] = [
@@ -137,4 +137,23 @@ export const bedTypes: BedType[] = [
   '유아용 침대',
   '해먹',
   '물침대',
-]
+];
+
+//국가 리스트
+export const countryList = [
+  '가나',
+  '가봉',
+  '가이아나',
+  '그린란드',
+  '남아프리카',
+  '뉴질랜드',
+  '모나코',
+  '벨기에',
+  '벨라루스',
+  '불가리아',
+  '세네갈',
+  '스리랑카',
+  '스위스',
+  '스페인',
+  '우크라이나',
+];
