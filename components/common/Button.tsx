@@ -106,8 +106,6 @@ const Button: React.FC<IProps> = ({
   icon,
   ...props
 }) => {
-  console.log('colorReverse');
-  console.log(colorReverse);
   return (
     <Container
       {...props}

@@ -1,20 +1,26 @@
-import React from 'react'
-import styled, {css} from 'styled-components'
-import palette from '../../styles/palette'
-import {useSelector} from '../../store/index'
+import React from 'react';
+import styled, { css } from 'styled-components';
+import palette from '../../styles/palette';
+import { useSelector } from '../../store/index';
 
 type InputContainerProps = {
-  iconExist: boolean
-  isValid: boolean
-  checkValidateMode: boolean
-}
+  iconExist: boolean;
+  isValid: boolean;
+  checkValidateMode: boolean;
+};
 
 const Container = styled.div<InputContainerProps>`
+  label {
+    span {
+      display: block;
+      margin-bottom: 8px;
+    }
+  }
   input {
     position: relative;
     width: 100%;
     height: 46px;
-    padding: ${({iconExist}) => (iconExist ? '0 44px 0 11px' : '0 11px')};
+    padding: ${({ iconExist }) => (iconExist ? '0 44px 0 11px' : '0 11px')};
     border: 1px solid ${palette.gray_eb};
     border-radius: 4px;
     font-size: 16px;
@@ -40,7 +46,7 @@ const Container = styled.div<InputContainerProps>`
     font-size: 14px;
     color: ${palette.tawny};
   }
-  ${({checkValidateMode, isValid}) =>
+  ${({ checkValidateMode, isValid }) =>
     checkValidateMode &&
     !isValid &&
     css`
@@ -52,7 +58,7 @@ const Container = styled.div<InputContainerProps>`
         }
       }
     `}
-  ${({checkValidateMode, isValid}) =>
+  ${({ checkValidateMode, isValid }) =>
     checkValidateMode &&
     isValid &&
     css`
@@ -60,16 +66,18 @@ const Container = styled.div<InputContainerProps>`
         border-color: ${palette.dark_cyan};
       }
     `}
-`
+`;
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon?: JSX.Element
-  isValid?: boolean
+  icon?: JSX.Element;
+  isValid?: boolean;
   // checkValidateMode?: boolean
-  errorMessage?: string
+  errorMessage?: string;
+  label?: string;
 }
 
 const ValidateInput: React.FC<IProps> = ({
+  label,
   icon,
   // checkValidateMode = false,
   isValid = false,
@@ -77,21 +85,28 @@ const ValidateInput: React.FC<IProps> = ({
   ...props
 }) => {
   const checkValidateMode = useSelector(
-    (state) => state.common.checkValidateMode
-  )
+    state => state.common.checkValidateMode
+  );
 
   return (
     <Container
       iconExist={!!icon}
       isValid={isValid}
-      checkValidateMode={checkValidateMode}>
-      <input {...props} />
-      <div className='input-icon-wrapper'>{icon}</div>
+      checkValidateMode={checkValidateMode}
+    >
+      {label && (
+        <label>
+          <span>{label}</span>
+          <input {...props} />
+        </label>
+      )}
+      {!label && <input {...props} />}
+      <div className="input-icon-wrapper">{icon}</div>
       {checkValidateMode && !isValid && errorMessage && (
-        <p className='input-error-message'>{errorMessage}</p>
+        <p className="input-error-message">{errorMessage}</p>
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default ValidateInput
+export default ValidateInput;

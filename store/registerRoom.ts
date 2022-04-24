@@ -12,7 +12,7 @@ type RegisterRoomState = {
   publicBedList: { type: BedType; count: number }[];
   bathroomCount: number;
   bathroomType: 'private' | 'public' | null;
-  country: string;
+  country: string | undefined;
   city: string;
   district: string;
   streetAddress: string;
@@ -47,7 +47,7 @@ const initialState: RegisterRoomState = {
   //욕실유형
   bathroomType: null,
   // 국가/지역
-  country: '',
+  country: undefined,
   // 시/도
   city: '',
   // 시/군/구
@@ -190,7 +190,7 @@ const registerRoom = createSlice({
     },
     // 동호수 변경하기
     setDetailAddress(state, action: PayloadAction<string>) {
-      state.streetAddress = action.payload;
+      state.detailAddress = action.payload;
     },
     // 우편번호 변경하기
     setPostcode(state, action: PayloadAction<string>) {
