@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { registerRoomActions } from '../../store/registerRoom';
 import { useSelector } from '../../store';
 
+import { getLocationInfoAPI } from '../../lib/networkApi/map';
 const Container = styled.div`
   padding: 62px 30px 100px;
   h2 {
@@ -80,13 +81,21 @@ const RegisterLocation: React.FC = () => {
   };
 
   //현재 위치 불러오기 성공했을때
-  const onSuccessGetLocation = ({
+  const onSuccessGetLocation = async ({
     coords,
   }: {
     coords: GeolocationCoordinates;
   }) => {
-    console.log('latitude', coords.latitude);
-    console.log('longitude', coords.longitude);
+    try {
+      const { data } = await getLocationInfoAPI({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+      console.log(data);
+    } catch (e: any) {
+      console.log(e);
+      alert(e.message);
+    }
   };
 
   //현재 위치 사용 클릭 시
