@@ -31,6 +31,7 @@ const Container = styled.li`
     margin-top: 28px;
   }
   .register-room-bed-type-bedroom-counts {
+    white-space: nowrap;
     font-size: 19px;
     color: ${palette.gray_76};
   }
@@ -77,11 +78,7 @@ const RegisterRoomPublicBedTypes: React.FC = () => {
             {bedsText}
           </p>
         </div>
-        <Button
-          onClick={() => setOpened(!opened)}
-          styleType="register"
-          color="white"
-        >
+        <Button onClick={() => setOpened(!opened)} color="white">
           {opened && '완료'}
           {!opened &&
             (totalBedsCount === 0 ? '침대 추가하기' : '침대 수정하기')}
