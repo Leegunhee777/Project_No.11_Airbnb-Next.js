@@ -10,6 +10,7 @@ import { uploadFileAPI } from '../../lib/networkApi/file';
 import { useDispatch } from 'react-redux';
 import { registerRoomActions } from '../../store/registerRoom';
 import RegisterRoomPhotoCardList from './RegisterRoomPhotoCardList';
+import RegisterRoomFooter from './RegisterRoomFooter';
 const Conatiner = styled.div`
   padding: 62px 30px 100px;
   h2 {
@@ -93,6 +94,11 @@ const RegisterRoomPhoto: React.FC = () => {
         </div>
       )}
       {!isEmpty(photos) && <RegisterRoomPhotoCardList photos={photos} />}
+      <RegisterRoomFooter
+        isValid={true}
+        prevHref="/room/register/conveniences"
+        nextHref="/room/register/description"
+      />
     </Conatiner>
   );
 };
