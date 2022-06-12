@@ -45,11 +45,13 @@ const RegisterRoomPrice: React.FC = () => {
       <h2>숙소 요금 설정하기</h2>
       <h3>10단계</h3>
       <ValidateInput
+        isValid={true}
         label="기본요금"
         value={makeMoneyString(String(price))}
         onChange={onChangePrice}
       />
       <RegisterRoomFooter
+        isValid={true}
         prevHref="/room/register/title"
         nextHref="/room/register/date"
       />
