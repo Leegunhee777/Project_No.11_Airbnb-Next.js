@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import palette from '../../styles/palette';
+import ko from 'date-fns/locale/ko';
+import addHours from 'date-fns/addHours';
+
 //library css를 커스텀
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -45,7 +48,7 @@ const Container = styled.div`
   .react-datepicker__current-month {
     font-size: 16px;
     font-weight: 600;
-    font-family: Airbnb Ccereal, sans-serif;
+    font-family: Airbnb Cereal, sans-serif;
   }
   .react-datepicker__day-names {
     padding-top: 16px;
@@ -80,11 +83,22 @@ const Container = styled.div`
       border-radius: 50%;
     }
   }
+
   .react-datepicker__day--in-range {
     background-color: ${palette.gray_f7};
   }
   .react-datepicker__day--in-selecting-range {
     background-color: ${palette.gray_f7};
+  }
+  .react-datepicker__day--selected {
+    background-color: ${palette.black};
+    color: white;
+    border-radius: 50%;
+    &:hover {
+      background-color: ${palette.black};
+
+      color: white;
+    }
   }
   .react-datepicker__day--range-start {
     background-color: ${palette.black};
@@ -105,10 +119,25 @@ const Container = styled.div`
   }
 `;
 
-const DatePicker: React.FC<ReactDatePickerProps> = ({ ...props }) => {
+const DatePicker: React.FC<ReactDatePickerProps> = ({ onChange, ...props }) => {
   return (
     <Container>
-      <ReactDatePicker {...props} disabledKeyboardNavigation />
+      <ReactDatePicker
+        {...props}
+        disabledKeyboardNavigation
+        locale={ko}
+        onChange={(date, event) => {
+          if (date) {
+            //9시간을 더해주는 이유는
+            //서울이 UTC시간기준+9 시간이기떄문에, 9시간전의 시간으로 표시된다
+            //고로 우리가 원하는 시간을 맞추려면 9시간을 더해줘야한다.
+            onChange(addHours(date as Date, 9), event);
+          } else {
+            onChange(null, event);
+          }
+        }}
+        dateFormat="yyyy년 MM월 dd일"
+      />
     </Container>
   );
 };
