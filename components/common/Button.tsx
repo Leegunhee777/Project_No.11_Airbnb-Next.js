@@ -2,6 +2,22 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import palette from '../../styles/palette';
 
+//버튼 크기 구하기
+const getButtonSize = (size: 'small' | 'medium') => {
+  switch (size) {
+    case 'medium':
+      return css`
+        height: 48px;
+      `;
+    case 'small':
+      return css`
+        font-size: 14px;
+        height: 36px;
+      `;
+    default:
+      return '';
+  }
+};
 //버튼 색상 구히기 후에 색상이 추가된다면 다른 색을 추가해서 컨트롤해도됨
 const getButtonColor = (color: string, colorReverse: boolean) => {
   if (colorReverse) {
@@ -69,6 +85,7 @@ const getButtonColor = (color: string, colorReverse: boolean) => {
 interface StyledButtonProps {
   width: string | undefined;
   colorReverse: boolean;
+  size: 'small' | 'medium';
 }
 const Container = styled.button<StyledButtonProps>`
   display: flex;
@@ -85,6 +102,7 @@ const Container = styled.button<StyledButtonProps>`
   cursor: pointer;
   width: ${props => props.width};
   ${props => getButtonColor(props.color || '', props.colorReverse)};
+  ${props => getButtonSize(props.size)}
   svg {
     margin-right: 12px;
   }
@@ -96,6 +114,7 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   width?: string;
   colorReverse?: boolean;
   icon?: JSX.Element;
+  size?: 'small' | 'medium';
 }
 
 const Button: React.FC<IProps> = ({
@@ -104,6 +123,7 @@ const Button: React.FC<IProps> = ({
   width,
   colorReverse = false,
   icon,
+  size = 'medium',
   ...props
 }) => {
   return (
@@ -112,6 +132,7 @@ const Button: React.FC<IProps> = ({
       color={color}
       width={width}
       colorReverse={colorReverse}
+      size={size}
     >
       {icon}
       {children}
