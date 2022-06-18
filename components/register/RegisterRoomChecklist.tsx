@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { useSelector } from '../../store';
 import RegisterRoomCheckStep from './RegisterRoomCheckStep';
 
+import RegisterRoomSubmitFooter from './RegisterRoomSubmitFooter';
+import RegisterRoomFooter from './RegisterRoomFooter';
+
 const Container = styled.div`
   padding: 62px 30px 100px;
   min-height: 100vh;
@@ -158,7 +161,7 @@ const RegisterRoomChecklist: React.FC = () => {
 
   //진행중인 단계
   const stepInProgress = useMemo(() => {
-    if (!isBathroomActived) {
+    if (!isBuildingTypeActiced) {
       return 'building';
     }
     if (!isRoomTypeActived) {
@@ -193,6 +196,10 @@ const RegisterRoomChecklist: React.FC = () => {
     }
     return '';
   }, []);
+  //유효한 값을 가지고있다면 체크리스트
+  //유효한가지고있지 않은 스텝은 해당 결로로 이동유도
+  //유효한 데이터를 가지고있지 않은 스텝 이후는 모두 disabled처리
+  console.log(`/room/register/${stepInProgress}`);
   return (
     <Container>
       <p className="register-room-checklist-info">
@@ -266,6 +273,16 @@ const RegisterRoomChecklist: React.FC = () => {
           inProgress={stepInProgress === 'date'}
         />
       </ul>
+      {/* {isDateActived 가 유효하다면 이전스텝들도 모두 유효한값을 가지고있다는 말, 체인형식으로 값의유효가 설정되어있으니} */}
+      {isDateActived ? (
+        <RegisterRoomSubmitFooter />
+      ) : (
+        <RegisterRoomFooter
+          isValid={true}
+          prevHref="/room/register/date"
+          nextHref={`/room/register/${stepInProgress}`}
+        />
+      )}
     </Container>
   );
 };
