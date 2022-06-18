@@ -1,4 +1,5 @@
-import user from './user'
+import user from './user';
+import room from './room';
 
-const Data = {user}
-export default Data
+const Data = { user, room };
+export default Data;
