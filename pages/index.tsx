@@ -1,7 +1,9 @@
-import React from 'react'
+import React from 'react';
+import { NextPage } from 'next';
+import Home from '../components/home/Home';
 
 const index: React.FC = () => {
-  return <div>Hello world가나다라입니다 ,HELLOKJDNFLKJSDNFLKJSNDLFJK</div>
-}
+  return <Home />;
+};
 
-export default index
+export default index;
