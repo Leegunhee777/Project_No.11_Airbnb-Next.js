@@ -23,9 +23,16 @@ export const getLocationInfoAPI = async ({
   );
 };
 
-//구글 장소 검색 api
+//구글 장소 검색 한글 일부 입력후 해당 지역에 대한 full Name 완성후 반환가능 api
 export const searchPlacesAPI = (keyword: string) => {
   return axios.get<{ description: string; placeId: string }[]>(
     `/api/maps/places?keyword=${keyword}`
+  );
+};
+
+//placeId로 장소정보 가져오기
+export const getPlaceAPI = (placeId: string) => {
+  return axios.get<{ location: string; latitude: number; longitude: number }>(
+    `/api/maps/places/${placeId}`
   );
 };
