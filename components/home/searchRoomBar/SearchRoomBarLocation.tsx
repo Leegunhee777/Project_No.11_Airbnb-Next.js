@@ -1,11 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch } from 'react-redux';
 import { useSelector } from '../../../store';
 import { searchRoomActions } from '../../../store/searchRoom';
 import palette from '../../../styles/palette';
-
+import { searchPlacesAPI } from '../../../lib/networkApi/map';
+import { isEmpty } from 'lodash';
+import useDebounce from '../../../hooks/useDeboundce';
 const Container = styled.div`
   position: relative;
   width: 100%;
@@ -70,6 +72,11 @@ const SearchRoomBarLocation: React.FC = () => {
   const dispatch = useDispatch();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  //검색결과
+  const [results, setResults] = React.useState<
+    { description: string; placeId: string }[]
+  >([]);
   //위치변경
   const setLocationDispatch = (value: string) => {
     dispatch(searchRoomActions.setLocation(value));
@@ -83,6 +90,27 @@ const SearchRoomBarLocation: React.FC = () => {
     }
     setPopupOpened(true);
   };
+
+  const searchPlaces = async () => {
+    try {
+      const { data } = await searchPlacesAPI(encodeURI(location));
+      setResults(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchKeyword = useDebounce(location, 1000);
+
+  //검색어가 변하면 장소를 검색
+  useEffect(() => {
+    if (!searchKeyword) {
+      setResults([]);
+    }
+    if (searchKeyword) {
+      searchPlaces();
+    }
+  }, [searchKeyword]);
 
   return (
     <Container onClick={onClickInput}>
@@ -99,7 +127,12 @@ const SearchRoomBarLocation: React.FC = () => {
       </OutsideClickHandler>
       {popupOpened && (
         <ul className="search-room-bar-location-results ">
-          <li>근처 추천장소</li>
+          {!location && <li>근처 추천장소</li>}
+          {!isEmpty(results) &&
+            results.map((result, index) => (
+              <li key={index}>{result.description} </li>
+            ))}
+          {location && isEmpty(results) && <li>검색결과가 없습니다</li>}
         </ul>
       )}
     </Container>

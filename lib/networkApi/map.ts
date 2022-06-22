@@ -22,3 +22,10 @@ export const getLocationInfoAPI = async ({
     `/api/maps/location?latitude=${latitude}&longitude=${longitude}`
   );
 };
+
+//구글 장소 검색 api
+export const searchPlacesAPI = (keyword: string) => {
+  return axios.get<{ description: string; placeId: string }[]>(
+    `/api/maps/places?keyword=${keyword}`
+  );
+};
