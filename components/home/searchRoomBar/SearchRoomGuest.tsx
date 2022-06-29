@@ -92,7 +92,7 @@ const SearchRoomGuests: React.FC = () => {
       <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
         <div className="search-room-bar-guests-texts">
           <p className="search-room-bar-guest-label">인원</p>
-          <p className="search-room-bar-guests-text">성인 0명</p>
+          <p className="search-room-bar-guests-text">성인 {adultCount}명</p>
         </div>
         <div className="search-room-bar-button-wrapper">
           <SearchRoomButton />

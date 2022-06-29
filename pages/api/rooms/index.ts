@@ -4,6 +4,40 @@ import { StoredRoomType } from '../../../types/room';
 import Data from '../../../lib/data';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === 'GET') {
+    const {
+      checkInDate,
+      checkOutDate,
+      adultCount,
+      childrenCount,
+      infantsCount,
+      latitude,
+      longitude,
+      limit,
+      page = '1',
+    } = req.query;
+
+    try {
+      const rooms = Data.room.getList();
+
+      //개수 자르기  페이징처리를위한 노출limit수와, page를 받아서 해당 데이터부분만 splice하여 내려주는것임
+      const limitedRooms = rooms.splice(
+        0 + (Number(page) - 1) * Number(limit),
+        Number(limit)
+      );
+      //host 정보 넣기
+      const roomsWithHost = await Promise.all(
+        limitedRooms.map(async room => {
+          const host = Data.user.find({ id: room.hostId });
+          return { ...room, host };
+        })
+      );
+      res.statusCode = 200;
+      return res.send(roomsWithHost);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   if (req.method === 'POST') {
     //숙소 등록하기
     try {

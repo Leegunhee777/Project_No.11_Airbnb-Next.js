@@ -52,23 +52,34 @@ export const makeMoneyString = (input: string) => {
 //list 필터링으로 사용하기위한 query string 만들기
 //url과 객체를 이용해 url에 쿼리를 붙여주는 함수이다.
 //query-string라는 라이브러리 또한 같은 기능을하니 다운받아 사용해도된다.
+// {adultCount: 2
+// checkInDate: "2022-06-30T00:00:00.000Z"
+// checkOutDate: "2022-07-29T00:00:00.000Z"
+// childrenCount: 0
+// infantsCount: 0
+// latitude: 37.4417688
+// location: "근처 추천 장소"
+// longitude: 127.1329047
+// }
+//위의 형식을
+// /room?location=근처 추천 장소&latitude=37.4417663&longitude=127.1329219&checkInDate=2022-07-19T00:00:00.000Z&checkOutDate=2022-08-19T00:00:00.000Z&adultCount=2
+// queryPath 에 사용할수있도록 변환해주는 유틸함수이다.
 export const makeQueryString = (
   baseUrl: string,
   queriesObject: Object & { [key: string]: any }
 ) => {
   const keys = Object.keys(queriesObject);
   const values = Object.values(queriesObject);
-
   if (keys.length === 0) {
     return baseUrl;
   }
-
   let queryString = `${baseUrl}?`;
   keys.forEach((key, i) => {
     if (queriesObject[key]) {
-      queryString += `${keys[i]}=${values[i]}`;
+      queryString += `${keys[i]}=${values[i]}&`;
     }
   });
-  //마지막 필요없는'&' 제거하기
+  //* 마지막 '&' 제거하기
+  console.log(queriesObject);
   return queryString.slice(0, -1);
 };

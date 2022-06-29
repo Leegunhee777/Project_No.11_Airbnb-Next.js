@@ -1,3 +1,4 @@
+import { UserType } from './user';
 //침대유형
 export type BedType =
   | '다른침대추가'
@@ -77,4 +78,39 @@ type RegisterRoomState = {
   price: number;
   startDate: string | null;
   endDate: string | null;
+};
+
+//숙소의타입
+export type RoomType = {
+  id: number;
+  largeBuildingType: string | null;
+  buildingType: string | null;
+  roomType: string | null;
+  isSetUpForGuest: boolean | null;
+  maximumGuestCount: number;
+  bedroomCount: number;
+  bedCount: number;
+  bedList: { id: number; beds: { type: BedType; count: number }[] }[];
+  publicBedList: { type: BedType; count: number }[];
+  bathroomCount: number;
+  bathroomType: 'private' | 'public' | null;
+  latitude: number;
+  longitude: number;
+  country: string | undefined;
+  city: string;
+  district: string;
+  streetAddress: string;
+  detailAddress: string;
+  postcode: string;
+  amentities: string[];
+  conveniences: string[];
+  photos: string[];
+  description: string;
+  title: string;
+  price: number;
+  startDate: string | null;
+  endDate: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  host: UserType;
 };
