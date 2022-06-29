@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import ko from 'date-fns/locale/ko';
-import addHours from 'date-fns/addHours';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import palette from '../../styles/palette';
+import ko from 'date-fns/locale/ko';
+import addHours from 'date-fns/addHours';
+
+//library css를 커스텀
 import 'react-datepicker/dist/react-datepicker.css';
 
 const Container = styled.div`
@@ -30,17 +32,17 @@ const Container = styled.div`
     background-color: white;
   }
   .react-datepicker__navigation--previous {
-    top: 40px;
+    top: 28px;
     left: 56px;
     border: 0;
-    background-image: url('/static/svg/common/datePicker/datepicker_left_arrow.svg');
+    background-image: url('/static/svg/common/datePicker/datepicker_letf_arrow.svg');
     background-repeat: no-repeat;
   }
   .react-datepicker__navigation--next {
-    top: 40px;
+    top: 28px;
     right: 56px;
     border: 0;
-    background-image: url('/static/svg/common/datePicker/datepciker_right_arrow.svg');
+    background-image: url('/static/svg/common/datePicker/datepicker_right_arrow.svg');
     background-repeat: no-repeat;
   }
   .react-datepicker__current-month {
@@ -61,6 +63,9 @@ const Container = styled.div`
   }
   .react-datepicker__month {
     margin: 0;
+  }
+  .react-datepicker__week {
+    display: flex;
   }
   .react-datepicker__day {
     width: 48px;
@@ -122,16 +127,19 @@ const DatePicker: React.FC<ReactDatePickerProps> = ({ onChange, ...props }) => {
     <Container>
       <ReactDatePicker
         {...props}
-        dateFormat="MM월 dd일"
         disabledKeyboardNavigation
         locale={ko}
         onChange={(date, event) => {
           if (date) {
+            //9시간을 더해주는 이유는
+            //서울이 UTC시간기준+9 시간이기떄문에, 9시간전의 시간으로 표시된다
+            //고로 우리가 원하는 시간을 맞추려면 9시간을 더해줘야한다.
             onChange(addHours(date as Date, 9), event);
           } else {
             onChange(null, event);
           }
         }}
+        dateFormat="yyyy년 MM월 dd일"
       />
     </Container>
   );
