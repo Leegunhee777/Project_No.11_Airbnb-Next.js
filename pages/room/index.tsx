@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { wrapper } from '../../store';
 import RoomMain from '../../components/main/RoomMain';
 import { getRoomListAPI } from '../../lib/networkApi/room';
-
+import { roomActions } from '../../store/room';
 const index: NextPage = () => {
   return <RoomMain />;
 };
@@ -48,6 +48,8 @@ index.getInitialProps = async ({ store, query }) => {
         ? encodeURI(query.location as string)
         : undefined,
     });
+
+    store.dispatch(roomActions.setRooms(data));
   } catch (error) {}
   console.log(query);
   return {};
