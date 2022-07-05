@@ -6,6 +6,7 @@ import MapIcon from '../../public/static/svg/room/main/map.svg';
 import palette from '../../styles/palette';
 
 import { useSelector } from '../../store';
+import RoomList from './RoomList';
 
 const Container = styled.div`
   padding: 50px 80px;
@@ -99,7 +100,9 @@ const RoomMain: React.FC = () => {
           <MapIcon /> 지도 표시하기
         </button>
       </div>
-      <div className="room-list-wrapper"></div>
+      <div className="room-list-wrapper">
+        <RoomList showMap={showMap} />
+      </div>
     </Container>
   );
 };

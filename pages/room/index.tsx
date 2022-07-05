@@ -4,6 +4,7 @@ import { wrapper } from '../../store';
 import RoomMain from '../../components/main/RoomMain';
 import { getRoomListAPI } from '../../lib/networkApi/room';
 import { roomActions } from '../../store/room';
+import { Context } from 'next-redux-wrapper';
 const index: NextPage = () => {
   return <RoomMain />;
 };
@@ -20,20 +21,10 @@ const index: NextPage = () => {
 //     childrenCount: 0,
 //     infantsCount: 0
 //   }으로 뽑아서 확인할수있음
-index.getInitialProps = async ({ store, query }) => {
-  const {
-    checkInDate,
-    checkOutDate,
-    adultCount,
-    childrenCount,
-    infantsCount,
-    latitude,
-    longitude,
-    limit,
-    page = '1',
-  } = query;
-  try {
-    const { data } = await getRoomListAPI({
+index.getInitialProps = wrapper.getInitialPageProps(
+  store => async (context: Context) => {
+    const { query }: any = context;
+    const {
       checkInDate,
       checkOutDate,
       adultCount,
@@ -41,18 +32,30 @@ index.getInitialProps = async ({ store, query }) => {
       infantsCount,
       latitude,
       longitude,
-      limit: limit || '20',
-      page: page || '1',
-      //? 한글은 encode해주세요
-      location: query.location
-        ? encodeURI(query.location as string)
-        : undefined,
-    });
-
-    store.dispatch(roomActions.setRooms(data));
-  } catch (error) {}
-  console.log(query);
-  return {};
-};
+      limit,
+      page = '1',
+    } = query;
+    try {
+      const { data } = await getRoomListAPI({
+        checkInDate,
+        checkOutDate,
+        adultCount,
+        childrenCount,
+        infantsCount,
+        latitude,
+        longitude,
+        limit: limit || '20',
+        page: page || '1',
+        //? 한글은 encode해주세요
+        location: query.location
+          ? encodeURI(query.location as string)
+          : undefined,
+      });
+      store.dispatch(roomActions.setRooms(data));
+    } catch (error) {}
+    // console.log(query);
+    return {};
+  }
+);
 
 export default index;

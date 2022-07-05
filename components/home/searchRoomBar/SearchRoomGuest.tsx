@@ -127,7 +127,6 @@ const SearchRoomGuests: React.FC = () => {
           </div>
         )}
       </OutsideClickHandler>
-      게스트와 버튼
     </Container>
   );
 };
