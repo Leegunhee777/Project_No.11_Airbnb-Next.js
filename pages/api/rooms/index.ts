@@ -20,8 +20,48 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const rooms = Data.room.getList();
 
+      //필터링 하기
+      const filteredRooms = rooms.filter(room => {
+        if (latitude && latitude !== '0' && longitude && longitude !== '0') {
+          if (
+            !(
+              Number(latitude) - 0.5 < room.latitude &&
+              room.latitude < Number(latitude) + 0.05 &&
+              Number(longitude) - 0.5 < room.longitude &&
+              room.longitude < Number(longitude) + 0.05
+            )
+          ) {
+            return false;
+          }
+        }
+        if (checkInDate) {
+          if (
+            new Date(checkInDate as string) < new Date(room.startDate!) ||
+            new Date(checkInDate as string) > new Date(room.endDate!)
+          ) {
+            return false;
+          }
+        }
+        if (checkOutDate) {
+          if (
+            new Date(checkOutDate as string) < new Date(room.startDate!) ||
+            new Date(checkOutDate as string) > new Date(room.endDate!)
+          ) {
+            return false;
+          }
+        }
+        if (
+          room.maximumGuestCount <
+          Number(adultCount as string) +
+            (Number(childrenCount as string) * 0.5 || 0)
+        ) {
+          return false;
+        }
+        return true;
+      });
+
       //개수 자르기  페이징처리를위한 노출limit수와, page를 받아서 해당 데이터부분만 splice하여 내려주는것임
-      const limitedRooms = rooms.splice(
+      const limitedRooms = filteredRooms.splice(
         0 + (Number(page) - 1) * Number(limit),
         Number(limit)
       );
