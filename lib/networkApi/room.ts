@@ -28,3 +28,8 @@ type GetRoomListAPIQueries = {
 export const getRoomListAPI = (queries: GetRoomListAPIQueries) => {
   return axios.get<RoomType[]>(makeQueryString('/api/rooms', queries));
 };
+
+//숙소 하나 불러오기
+export const getRoomAPI = (roomId: number) => {
+  return axios.get<RoomType>(`/api/rooms/${roomId}`);
+};

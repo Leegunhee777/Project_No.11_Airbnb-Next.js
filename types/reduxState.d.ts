@@ -27,4 +27,5 @@ export type SearchRoomState = {
 //숙소 redux State
 export type RoomState = {
   rooms: RoomType[];
+  detail: RoomType | null;
 };
