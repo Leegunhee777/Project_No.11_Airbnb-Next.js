@@ -6,6 +6,11 @@ import Button from '../common/Button';
 import { useSelector } from '../../store';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Counter from '../common/Counter';
+import useModal from '../../hooks/useModal';
+import AuthModal from '../auth/AuthModal';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/auth';
+
 const Container = styled.div`
   position: sticky;
   top: 128px;
@@ -146,6 +151,7 @@ const Container = styled.div`
 `;
 
 const RoomDetailReservation: React.FC = () => {
+  const dispatch = useDispatch();
   const room = useSelector(state => state.room.detail);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -155,6 +161,10 @@ const RoomDetailReservation: React.FC = () => {
   const [infantsCount, setInfantsCount] = useState(0);
 
   const [guestCountPopupOpened, setGuestCountPopupOpened] = useState(false);
+
+  const userId = useSelector(state => state.user.id);
+
+  const { openModal, ModalPortal, closeModal } = useModal();
 
   //숙소 예약버튼을 클릭했을때 startDate가 없다면 체크인 DatePicker에 focus가 가도록하고
   //startDate를 선택하면 endDate의 DatePicker에 포커스가 자동으로 가도록하겠다.
@@ -167,6 +177,11 @@ const RoomDetailReservation: React.FC = () => {
       checkInRef.current.focus();
     } else if (checkOutRef.current && !endDate) {
       checkOutRef.current.focus();
+    }
+    //예약하기를 위한 값이 입력되어있는데, 로그인이 안되있을경우 회원가입팝업노출
+    if (startDate && endDate && !userId) {
+      dispatch(authActions.setAuthMode('login'));
+      openModal();
     }
   };
 
@@ -278,6 +293,26 @@ const RoomDetailReservation: React.FC = () => {
       >
         {startDate && endDate ? '예약하기' : '날짜 선택하기'}
       </Button>
+
+      {startDate && endDate && (
+        <>
+          <p className="room-detail-reservation-price-date">
+            {room.price} X {endDate.getDay() - startDate.getDay()}박
+            <span>
+              {Number(room.price) * (endDate.getDay() - startDate.getDay())}
+            </span>
+          </p>
+          <p className="room-detail-reservation-total-price">
+            총 합계
+            <span>
+              {Number(room.price) * (endDate.getDay() - startDate.getDay())}
+            </span>
+          </p>
+        </>
+      )}
+      <ModalPortal>
+        <AuthModal closeModal={closeModal} />
+      </ModalPortal>
     </Container>
   );
 };
