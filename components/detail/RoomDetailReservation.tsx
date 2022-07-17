@@ -10,6 +10,8 @@ import useModal from '../../hooks/useModal';
 import AuthModal from '../auth/AuthModal';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../store/auth';
+import { makeReservationAPI } from '../../lib/networkApi/reservation';
+import Router from 'next/router';
 
 const Container = styled.div`
   position: sticky;
@@ -182,6 +184,23 @@ const RoomDetailReservation: React.FC = () => {
     if (startDate && endDate && !userId) {
       dispatch(authActions.setAuthMode('login'));
       openModal();
+    } else {
+      try {
+        const body = {
+          roomId: room?.id,
+          userId,
+          checkInDate: startDate!.toISOString(),
+          checkOutDate: endDate!.toISOString(),
+          adultCount,
+          childrenCount,
+          infantsCount,
+        };
+        await makeReservationAPI(body);
+        alert('숙소 등록을 완료하였습니다.');
+        Router.push('/');
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
